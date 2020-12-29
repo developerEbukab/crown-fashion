@@ -23,9 +23,17 @@
     }
   }
 
+  .footer{
+    // background-color: green;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
   .total {
-    margin-top: 30px;
-    margin-left: auto;
-    font-size: 36px;
+    margin-right: 3rem;
+    font-size: 3rem;
   }
 }
