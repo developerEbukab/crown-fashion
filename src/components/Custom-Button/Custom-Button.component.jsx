@@ -12,4 +12,6 @@ const CustomButton = ({children, isGoogleSignIn, inverted, ...otherProps}) => {
   );
 }
 
+//     <CustomButtonContainer {...props}>{children}</CustomButtonContainer>
+
 export default CustomButton;

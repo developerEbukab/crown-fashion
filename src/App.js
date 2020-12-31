@@ -1,15 +1,16 @@
 import React, { Component } from 'react';import './App.scss';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import HomePage from './components/Homepage/HomePage.component';
+import HomePage from './pages/Homepage/HomePage.component';
 import ShopPage from './pages/ShopPage/ShopPage.component';
 import Header from './components/Header/Header.component';
 import SignInAndSignUp from './pages/Sign-In-And-Sign-Up/Sign-In-And-Sign-Up.component';
-import { auth , createUserProfileDocument } from './firebase/firebase.utils';
+import { addCollectionAndDocuments, auth , createUserProfileDocument } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions';
 import {createStructuredSelector} from "reselect"
 import { selectCurrentUser } from './redux/user/user.selectors';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage.component';
+import { selectCollectionsForPreview } from './redux/shop/shop.selectors';
 
 class App extends Component {
   state = {
@@ -19,7 +20,7 @@ class App extends Component {
   unsubscribeFronAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser, collectionsArray } = this.props;
     this.unsubscribeFronAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
@@ -31,6 +32,7 @@ class App extends Component {
         })
       }
       setCurrentUser(userAuth )
+      // addCollectionAndDocuments("collections", collectionsArray.map(({title, items}) => ({title, items})))
     })
   }
 
@@ -62,11 +64,12 @@ class App extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  collectionsArray: selectCollectionsForPreview
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  setCurrentUser: user => dispatch(setCurrentUser(user)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
